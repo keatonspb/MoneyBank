@@ -13,18 +13,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <android.support.v4.widget.SwipeRefreshLayout
+        <keaton.moneybank.widget.CustomSwipeToRefresh
             android:id="@+id/swipe_container"
             android:layout_width="match_parent"
             android:splitMotionEvents="true"
             android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
+                android:splitMotionEvents="true"
                 android:overScrollMode="never"
                 android:clipToPadding="false"
                 android:id="@+id/content_list"
                 android:layout_height="wrap_content" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </keaton.moneybank.widget.CustomSwipeToRefresh>
     <ImageButton
         android:id="@+id/add_button"
         android:layout_width="57dp"
