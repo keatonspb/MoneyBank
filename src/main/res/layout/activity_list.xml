@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="keaton.moneybank.ListActivity">
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:splitMotionEvents="true"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:overScrollMode="never"
+                android:clipToPadding="false"
+                android:id="@+id/content_list"
+                android:layout_height="wrap_content" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="57dp"
+        android:layout_height="57dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:tint="@android:color/white"
+        android:elevation="@dimen/elevation_high"
+        android:background="@drawable/oval"
+        android:layout_marginBottom="@dimen/add_button_margin"
+        android:layout_marginRight="@dimen/add_button_margin"
+        android:src="@android:drawable/ic_input_add"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_gravity="center"
+            android:text="@string/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </ViewFlipper>
+
+</LinearLayout>
