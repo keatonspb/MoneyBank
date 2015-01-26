@@ -14,6 +14,7 @@ public class ReasonItem implements Serializable {
     public static final String ID_FIELD = "id";
     public static final String NAME_FIELD = "name";
     public static final String TYPE_FIELD = "type";
+    public static final String RATING_FIELD = "rating";
 
     @DatabaseField(columnName = ID_FIELD, id = true, useGetSet = true)
     private int id;
@@ -21,6 +22,8 @@ public class ReasonItem implements Serializable {
     private String name;
     @DatabaseField(columnName = TYPE_FIELD, useGetSet = true)
     private String type;
+    @DatabaseField(columnName = RATING_FIELD, useGetSet = true)
+    private Integer rating;
 
 
     public int getId() {
@@ -40,6 +43,12 @@ public class ReasonItem implements Serializable {
     }
     public void setType(String type) {
         this.type = type;
+    }
+    public Integer getRating() {
+        return rating;
+    }
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     @Override

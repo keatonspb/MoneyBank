@@ -11,6 +11,7 @@ import android.widget.ViewFlipper;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.table.TableUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -99,14 +100,14 @@ public class ReportActivity extends ActionBarActivity {
                     ArrayList<ReasonItem> result = new ArrayList<>();
                     DatabaseHelper helper = OpenHelperManager.getHelper(ReportActivity.this, DatabaseHelper.class);
                     ReasonDao reasonDao = helper.getReasonDao();
-                    DeleteBuilder deleteBuilder = reasonDao.deleteBuilder();
-                    deleteBuilder.delete();
+                    TableUtils.clearTable(helper.getConnectionSource(), ReasonItem.class);
                     for(int i = 0; i < rows.length(); i++) {
                         JSONObject json = rows.optJSONObject(i);
                         ReasonItem reason = new ReasonItem();
                         reason.setId(json.getInt("id"));
                         reason.setName(json.getString("name"));
                         reason.setType(json.getString("source"));
+                        reason.setRating(json.getInt("rating"));
                         Log.d("MONEYLOG", "Add reason "+reason.getName()+", "+reason.getType());
                         reasonDao.createOrUpdate(reason);
                     }

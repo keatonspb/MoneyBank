@@ -150,6 +150,7 @@ public class AddIncome extends Fragment {
                 ReasonDao reasonDao = helper.getReasonDao();
                 QueryBuilder<ReasonItem, Integer> builder = reasonDao.queryBuilder();
                     builder.where().eq(ReasonItem.TYPE_FIELD, "income");
+                    builder.orderBy(ReasonItem.RATING_FIELD, false);
                     result.addAll(reasonDao.query(builder.prepare()));
                     return result;
                 } catch (Exception e) {
