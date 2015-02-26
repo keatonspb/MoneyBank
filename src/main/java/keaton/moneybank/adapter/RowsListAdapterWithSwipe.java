@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,33 +43,50 @@ public class RowsListAdapterWithSwipe extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int i) {
         List<View> pages = new ArrayList<View>();
         DataItem item = (DataItem) items.get(i);
 
         View mainView = LayoutInflater.from(ctx).inflate(R.layout.row, ((ViewHolder) viewHolder).pager, false);
         deleteLayout = LayoutInflater.from(ctx).inflate(R.layout.delete_layot, ((ViewHolder) viewHolder).pager, false);
+        Button cancelButton = (Button) deleteLayout.findViewById(R.id.cancel_button);
+        Button deleteButton = (Button) deleteLayout.findViewById(R.id.delete_button);
         pages.add(populate(item, mainView));
         pages.add(deleteLayout);
 
         RowPagerAdapter adapter = new RowPagerAdapter(pages);
+
         ((ViewHolder) viewHolder).pager.setAdapter(adapter);
-        ((ViewHolder) viewHolder).pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                callBack.deleteItemCallback(i);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onClick(View v) {
+                ((ViewHolder) viewHolder).pager.setCurrentItem(0, true);
             }
         });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callBack.deleteItemCallback(i);
+            }
+        });
+
+//        ((ViewHolder) viewHolder).pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+////                callBack.deleteItemCallback(i);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
 
 
