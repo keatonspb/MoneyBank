@@ -12,6 +12,7 @@ public class DataItem implements Serializable {
     public int id;
     public int type;
     public String reason;
+    public int id_reason;
     public String caption;
     public String date;
     public Boolean credit = false;

@@ -46,10 +46,26 @@
         android:id="@+id/send_button"
         android:text="Потратить"
         android:elevation="@dimen/elevation_low"
-
         android:background="@drawable/reqtangle_ripple_red"
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
-
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:paddingTop="20dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Частые затраты"
+            android:textAllCaps="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <GridView
+            android:id="@+id/popular_expense_grid"
+            android:numColumns="3"
+            android:verticalSpacing="3dp"
+            android:horizontalSpacing="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></GridView>
+    </LinearLayout>
 </LinearLayout>

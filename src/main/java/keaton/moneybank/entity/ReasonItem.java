@@ -55,4 +55,12 @@ public class ReasonItem implements Serializable {
     public String toString() {
         return getName();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof ReasonItem) {
+            return ((ReasonItem) o).getId() == getId();
+        }
+        return false;
+    }
 }

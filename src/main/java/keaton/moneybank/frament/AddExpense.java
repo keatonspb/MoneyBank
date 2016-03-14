@@ -1,9 +1,6 @@
 package keaton.moneybank.frament;
 
 import android.app.Activity;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,14 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import org.apache.http.HttpEntity;
@@ -32,7 +27,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
@@ -40,9 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import keaton.moneybank.R;
+import keaton.moneybank.adapter.PopularAdapter;
 import keaton.moneybank.adapter.ReasonAdapter;
 import keaton.moneybank.db.DatabaseHelper;
+import keaton.moneybank.db.dao.PopularItemDao;
 import keaton.moneybank.db.dao.ReasonDao;
+import keaton.moneybank.entity.PopularItem;
 import keaton.moneybank.entity.ReasonItem;
 
 
@@ -55,7 +52,10 @@ public class AddExpense extends Fragment {
     private CheckBox credit;
     private Button sendbutton;
 
-    private ArrayAdapter adapter;
+
+    private ReasonAdapter adapter;
+    private ArrayAdapter popularAdapter;
+    private GridView popularGridView;
 
 
     public AddExpense() {
@@ -92,8 +92,31 @@ public class AddExpense extends Fragment {
             }
         });
 
+        popularGridView = (GridView) ctx.findViewById(R.id.popular_expense_grid);
+        popularGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("MONEYLOG", "fav clicked");
+                PopularItem popularItem = (PopularItem) popularAdapter.getItem(position);
+                sum_edit.setText(popularItem.getSum().toString());
+                ReasonItem item = new ReasonItem();
+                item.setId(popularItem.getIdReason());
+                int pos = adapter.getPosition(item);
+                if(pos != 0) {
+                    reason_spinner.setSelection(pos);
+                }
+
+
+
+            }
+        });
+
         getReasonsFromDb();
+        getPopularFromDb();
+
     }
+
+
 
     private void sendToServer() {
 
@@ -105,8 +128,8 @@ public class AddExpense extends Fragment {
         final String captionText = caption.getText().toString();
         final int reason = ((ReasonItem) reason_spinner.getSelectedItem()).getId();
 
-        Log.d("MONEYLOG", "Sum: "+sum+ " reasonId: "+reason+" caption: "+captionText);
-
+        Log.d("MONEYLOG", "Sum: " + sum + " reasonId: " + reason + " caption: " + captionText);
+        final String credit_part = credit.isChecked() ? "&credit=1" : "";
         new AsyncTask() {
 
             @Override
@@ -115,7 +138,7 @@ public class AddExpense extends Fragment {
 
 
                 try {
-                    String credit_part = credit.isChecked() ? "&credit=1" : "";
+
                     StringBuilder url = new StringBuilder("http://money.discode.ru/phone/set.php?action=expense&sum="+sum+"&reason="+String.valueOf(reason)+"&caption="+ URLEncoder.encode(captionText, "UTF-8")+credit_part);
 
                     HttpGet get = new HttpGet(url.toString());
@@ -176,6 +199,37 @@ public class AddExpense extends Fragment {
                     Log.d("MONEYLOG", "Reasonsize: "+((List) o).size());
                     adapter = new ReasonAdapter(getActivity(), (List) o);
                     reason_spinner.setAdapter(adapter);
+                } else if(o instanceof Exception) {
+                    Toast.makeText(getActivity(),  ((Exception) o).getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute();
+    }
+
+    private void getPopularFromDb() {
+        new AsyncTask() {
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                List<PopularItem> result = new ArrayList<>();
+                DatabaseHelper helper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
+                try {
+                    PopularItemDao popularItemDao = helper.getPopularItemDao();
+                    QueryBuilder<PopularItem, Integer> builder = popularItemDao.queryBuilder();
+                    builder.orderBy(PopularItem.SUM_FIELD, true);
+                    result.addAll(popularItemDao.query(builder.prepare()));
+                    return result;
+                } catch (Exception e) {
+                    Log.d("MONEYLOG", e.getMessage());
+                    return e;
+                }
+            }
+            @Override
+            protected void onPostExecute(Object o) {
+                if(o instanceof List) {
+                    Log.d("MONEYLOG", "Popularsize: "+((List) o).size());
+                    popularAdapter = new PopularAdapter(getActivity(), (List) o);
+                    popularGridView.setAdapter(popularAdapter);
                 } else if(o instanceof Exception) {
                     Toast.makeText(getActivity(),  ((Exception) o).getMessage(), Toast.LENGTH_LONG).show();
                 }

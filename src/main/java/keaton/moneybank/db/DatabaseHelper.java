@@ -10,7 +10,9 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import keaton.moneybank.db.dao.PopularItemDao;
 import keaton.moneybank.db.dao.ReasonDao;
+import keaton.moneybank.entity.PopularItem;
 import keaton.moneybank.entity.ReasonItem;
 
 /**
@@ -21,6 +23,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private ReasonDao reasonDao;
+    private PopularItemDao popularItemDao;
 
     public DatabaseHelper(Context context)
     {
@@ -32,6 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try
         {
             TableUtils.createTable(connectionSource, ReasonItem.class);
+            TableUtils.createTable(connectionSource, PopularItem.class);
         } catch (SQLException e)
         {
             Log.e("HITECH", "Unable to create datbases", e);
@@ -50,5 +54,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             reasonDao = new ReasonDao(getConnectionSource(), ReasonItem.class);
         }
         return reasonDao;
+    }
+
+    public PopularItemDao getPopularItemDao() throws SQLException
+    {
+        if (popularItemDao == null)
+        {
+            popularItemDao = new PopularItemDao(getConnectionSource(), PopularItem.class);
+        }
+        return popularItemDao;
     }
 }

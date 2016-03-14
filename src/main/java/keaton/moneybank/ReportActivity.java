@@ -26,7 +26,10 @@ import java.util.ArrayList;
 
 import keaton.moneybank.adapter.AddAdapter;
 import keaton.moneybank.db.DatabaseHelper;
+import keaton.moneybank.db.dao.PopularItemDao;
 import keaton.moneybank.db.dao.ReasonDao;
+import keaton.moneybank.entity.DataItem;
+import keaton.moneybank.entity.PopularItem;
 import keaton.moneybank.entity.ReasonItem;
 
 
@@ -77,6 +80,8 @@ public class ReportActivity extends ActionBarActivity {
         finish();
     }
 
+
+
     public void updateReasons() {
         Log.d("MONEYLOG", "updateReasons");
         new AsyncTask() {
@@ -110,6 +115,21 @@ public class ReportActivity extends ActionBarActivity {
                         reason.setRating(json.getInt("rating"));
                         Log.d("MONEYLOG", "Add reason "+reason.getName()+", "+reason.getType());
                         reasonDao.createOrUpdate(reason);
+                    }
+
+                    //Частые затраты
+                    JSONArray expenses = object.getJSONArray("popular_expenses");
+                    PopularItemDao popularItemDao = helper.getPopularItemDao();
+                    TableUtils.clearTable(helper.getConnectionSource(), PopularItem.class);
+                    if(expenses != null) {
+                        for(int i = 0; i < expenses.length(); i++) {
+                            JSONObject json = expenses.optJSONObject(i);
+                            PopularItem popularItem = new PopularItem();
+                            popularItem.setIdReason(json.getInt("id_reason"));
+                            popularItem.setReasonName(json.getString("reason"));
+                            popularItem.setSum(json.getInt("value"));
+                            popularItemDao.createOrUpdate(popularItem);
+                        }
                     }
                     return result;
 

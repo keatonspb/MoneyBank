@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="10dp"
+    style="@style/Base.TextAppearance.AppCompat.Button"
+    android:layout_height="100dp">
+    <TextView
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:id="@+id/popular_expense_item_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="14sp"
+        android:textColor="#818181"
+        android:textAllCaps="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:id="@+id/popular_expense_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
