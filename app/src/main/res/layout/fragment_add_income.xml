@@ -35,9 +35,7 @@
     <Button
         android:id="@+id/send_button"
         android:text="Пополнить"
-        android:elevation="@dimen/elevation_low"
-        android:background="@drawable/reqtangle_ripple_green"
-        android:textColor="@android:color/white"
+        style="@style/AddIncomeButton"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
 

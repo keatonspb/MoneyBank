@@ -24,4 +24,16 @@
 
     </style>
 
+    <style name="AddBaseButton" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:elevation">@dimen/elevation_high</item>
+
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="AddIncomeButton" parent="AddBaseButton">
+        <item name="android:background">@drawable/reqtangle_ripple_green</item>
+    </style>
+    <style name="AddExpenceButton" parent="AddBaseButton">
+        <item name="android:background">@drawable/reqtangle_ripple_red</item>
+    </style>
+
 </resources>

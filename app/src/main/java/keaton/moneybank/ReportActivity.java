@@ -1,5 +1,6 @@
 package keaton.moneybank;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -34,6 +35,7 @@ import keaton.moneybank.entity.ReasonItem;
 
 
 public class ReportActivity extends ActionBarActivity {
+    public static String ACTION_SHOW_INCOME = "ShowIncome";
     private static int SHOW_LOADING = 0;
     private static int SHOW_FORM = 1;
     private ViewPager viewPager;
@@ -46,9 +48,14 @@ public class ReportActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        Intent intent = getIntent();
+
         flipper = (ViewFlipper) findViewById(R.id.flipper);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new AddAdapter(getSupportFragmentManager()));
+
+
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -57,7 +64,7 @@ public class ReportActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 0) {
+                if (position == 0) {
                     getSupportActionBar().setTitle("Потратить");
 
                 } else {
@@ -70,6 +77,13 @@ public class ReportActivity extends ActionBarActivity {
 
             }
         });
+
+        if(intent.getAction() == ACTION_SHOW_INCOME) {
+            viewPager.setCurrentItem(1);
+        }
+
+
+
 
         updateReasons();
     }

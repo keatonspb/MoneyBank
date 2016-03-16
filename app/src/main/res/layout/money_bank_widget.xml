@@ -1,0 +1,34 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:background="@drawable/reqtangle_ripple_transpatant_white"
+        android:padding="@dimen/widget_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="horizontal">
+    <Button
+        android:layout_weight="1"
+        style="@style/AddExpenceButton"
+        android:layout_marginRight="10dp"
+        android:id="@+id/make_expence_widget"
+        android:text="@string/make_expence_widget_btn_label"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <Button
+        android:layout_weight="1"
+        style="@style/AddIncomeButton"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/make_income_widget"
+            android:text="@string/make_income_widget_btn_label"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

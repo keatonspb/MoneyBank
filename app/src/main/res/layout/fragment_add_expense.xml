@@ -45,9 +45,7 @@
     <Button
         android:id="@+id/send_button"
         android:text="Потратить"
-        android:elevation="@dimen/elevation_low"
-        android:background="@drawable/reqtangle_ripple_red"
-        android:textColor="@android:color/white"
+        style="@style/AddExpenceButton"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
     <LinearLayout
