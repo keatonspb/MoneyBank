@@ -1,3 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        is-multidex="true"
+        jar="D:\DOCS\Android\MoneyBank\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0a7302ed7b2ef96b273f238548f4ef1f1a88a6ef">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_8718e6d3d405e9b2c574c7b6922a3371fbfe463a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-core\4.48\e579bd2905d0399af5029aaaf9817d5fa0ca88a5\ormlite-core-4.48.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\ormlite-core-4.48_8314d0653b73cfaac39a5055cf7fe99d963d70d0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.gradle\caches\modules-2\files-2.1\com.j256.ormlite\ormlite-android\4.48\afa06f539a4026c10b247386312aa67404b80a16\ormlite-android-4.48.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="afa06f539a4026c10b247386312aa67404b80a16">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\ormlite-android-4.48_a44a08a6cb900b493de1ddc2668d5fe8a866b066\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.android\build-cache\eb5232d7789d4ceeef1f38c5099476f5b16752c5\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5310db22a4308aaf386262a5c07b4d07154ec5ac\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-21.0.3_ef779f627fc23de1750a2489683ef31886f5c905\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.android\build-cache\eb5232d7789d4ceeef1f38c5099476f5b16752c5\output\jars\libs\internal_impl-21.0.3.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-21.0.3_d7b8ca68f1d144048e72ee4688b4c79639be386a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.android\build-cache\3958e73405d665621f09cec6aec1c8b5c08752f0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3c052835652d450bdc03f6996c514178ff304956\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.android\build-cache\5549cf53992eb3c79e297b3f433cf7ad2d0004f4\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6d8c93ee761354fc984a5476b640cefef981b297\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\default.DESKTOP-FRLA3DE\.gradle\caches\modules-2\files-2.1\com.crashlytics.android\crashlytics\1.1.13\e821eafa1bf489a26bdb71f95078c26785b37a1\crashlytics-1.1.13.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0e821eafa1bf489a26bdb71f95078c26785b37a1">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10\crashlytics-1.1.13_289e76997fb32635dc22835808ec288fcd0e16f2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DOCS\Android\MoneyBank\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
+        <dex dex="D:\DOCS\Android\MoneyBank\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_048922a35974d57f09c724f06cf169c7fc6b511d\classes.dex" />
+    </item>
+
+</items>

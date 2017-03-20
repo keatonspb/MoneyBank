@@ -35,6 +35,7 @@ import keaton.moneybank.adapter.ReasonAdapter;
 import keaton.moneybank.db.DatabaseHelper;
 import keaton.moneybank.db.dao.ReasonDao;
 import keaton.moneybank.entity.ReasonItem;
+import keaton.moneybank.utils.CookieUtils;
 
 
 public class AddIncome extends Fragment {
@@ -101,13 +102,14 @@ public class AddIncome extends Fragment {
 
             @Override
             protected Object doInBackground(Object[] params) {
-                HttpClient client = new DefaultHttpClient();
+                DefaultHttpClient client = new DefaultHttpClient();
+                client.setCookieStore(CookieUtils.getInstance().getCookieStore());
 
                 try {
-                    StringBuilder url = new StringBuilder("http://money.discode.ru/phone/set.php?action=income&sum="+sum+"&reason="+String.valueOf(reason)+"&caption="+ URLEncoder.encode(captionText, "UTF-8"));
-
+                    StringBuilder url = new StringBuilder("http://m.discode.ru/api/bill?type=income&sum="+sum+"&reason_id="+String.valueOf(reason)+"&description="+ URLEncoder.encode(captionText, "UTF-8"));
                     HttpGet get = new HttpGet(url.toString());
                     HttpResponse r = client.execute(get);
+                    CookieUtils.getInstance().saveCookie(client);
                     HttpEntity e = r.getEntity();
 
                     String data = EntityUtils.toString(e);

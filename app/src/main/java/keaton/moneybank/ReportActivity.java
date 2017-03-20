@@ -32,10 +32,13 @@ import keaton.moneybank.db.dao.ReasonDao;
 import keaton.moneybank.entity.DataItem;
 import keaton.moneybank.entity.PopularItem;
 import keaton.moneybank.entity.ReasonItem;
+import keaton.moneybank.utils.CookieUtils;
 
 
 public class ReportActivity extends ActionBarActivity {
     public static String ACTION_SHOW_INCOME = "ShowIncome";
+    public static String ACTION_REQUEST_SUM = "ActionRequestSum";
+    public static String ACTION_REQUEST_REASON = "ActionRequestReason";
     private static int SHOW_LOADING = 0;
     private static int SHOW_FORM = 1;
     private ViewPager viewPager;
@@ -102,17 +105,20 @@ public class ReportActivity extends ActionBarActivity {
             @Override
             protected Object doInBackground(Object[] params) {
 
-                HttpClient client = new DefaultHttpClient();
-                StringBuilder url = new StringBuilder("http://money.discode.ru/phone/info.php");
+                DefaultHttpClient client = new DefaultHttpClient();
+                client.setCookieStore(CookieUtils.getInstance().getCookieStore());
+                StringBuilder url = new StringBuilder("http://m.discode.ru/api/reasons?with_popular=1");
                 HttpGet get = new HttpGet(url.toString());
                 try {
                     HttpResponse r = client.execute(get);
+                    CookieUtils.getInstance().saveCookie(client);
                     HttpEntity e = r.getEntity();
 
                     String data = EntityUtils.toString(e);
                     JSONObject object = new JSONObject(data);
+                    object = object.getJSONObject("data");
                     Log.d("MONEYLOG", data);
-                    JSONArray rows = object.getJSONArray("reasons");
+                    JSONArray rows = object.getJSONArray("list");
                     if(rows == null) {
                         throw new Exception("Нет данных");
                     }
@@ -125,8 +131,8 @@ public class ReportActivity extends ActionBarActivity {
                         ReasonItem reason = new ReasonItem();
                         reason.setId(json.getInt("id"));
                         reason.setName(json.getString("name"));
-                        reason.setType(json.getString("source"));
-                        reason.setRating(json.getInt("rating"));
+                        reason.setType(json.getString("type"));
+                        reason.setRating(json.optInt("rating"));
                         Log.d("MONEYLOG", "Add reason "+reason.getName()+", "+reason.getType());
                         reasonDao.createOrUpdate(reason);
                     }
@@ -139,8 +145,8 @@ public class ReportActivity extends ActionBarActivity {
                         for(int i = 0; i < expenses.length(); i++) {
                             JSONObject json = expenses.optJSONObject(i);
                             PopularItem popularItem = new PopularItem();
-                            popularItem.setIdReason(json.getInt("id_reason"));
-                            popularItem.setReasonName(json.getString("reason"));
+                            popularItem.setIdReason(json.getInt("reason_id"));
+                            popularItem.setReasonName(json.getString("name"));
                             popularItem.setSum(json.getInt("value"));
                             popularItemDao.createOrUpdate(popularItem);
                         }

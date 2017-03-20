@@ -8,12 +8,13 @@
         <item name="android:spinnerItemStyle">@style/spinnerItemStyle</item>
 
     </style>
+
     <style name="AppThemeRed" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryRed</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkRed</item>
     </style>
-    
+
     <style name="spinnerItemStyle" parent="android:Widget.Material.TextView.SpinnerItem">
         <item name="android:textSize">@dimen/form_text_size</item>
         <item name="android:paddingStart">0dp</item>
@@ -29,11 +30,25 @@
 
         <item name="android:textColor">@android:color/white</item>
     </style>
+
     <style name="AddIncomeButton" parent="AddBaseButton">
         <item name="android:background">@drawable/reqtangle_ripple_green</item>
     </style>
+
     <style name="AddExpenceButton" parent="AddBaseButton">
         <item name="android:background">@drawable/reqtangle_ripple_red</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

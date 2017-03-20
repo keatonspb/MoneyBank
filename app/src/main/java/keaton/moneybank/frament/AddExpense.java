@@ -1,6 +1,7 @@
 package keaton.moneybank.frament;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import keaton.moneybank.R;
+import keaton.moneybank.ReportActivity;
 import keaton.moneybank.adapter.PopularAdapter;
 import keaton.moneybank.adapter.ReasonAdapter;
 import keaton.moneybank.db.DatabaseHelper;
@@ -41,6 +43,7 @@ import keaton.moneybank.db.dao.PopularItemDao;
 import keaton.moneybank.db.dao.ReasonDao;
 import keaton.moneybank.entity.PopularItem;
 import keaton.moneybank.entity.ReasonItem;
+import keaton.moneybank.utils.CookieUtils;
 
 
 public class AddExpense extends Fragment {
@@ -80,7 +83,12 @@ public class AddExpense extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ctx = getActivity();
 
+
+
         sum_edit = (EditText) ctx.findViewById(R.id.add_summ);
+
+
+
         caption = (EditText) ctx.findViewById(R.id.add_caption);
         reason_spinner = (Spinner) ctx.findViewById(R.id.spinner_reasons);
         credit = (CheckBox) ctx.findViewById(R.id.credit_checkbox);
@@ -110,7 +118,15 @@ public class AddExpense extends Fragment {
 
             }
         });
-
+        //Возможно прищли данные с предустановкой
+        Intent intent = ctx.getIntent();
+        Integer reasonId = intent.getIntExtra(ReportActivity.ACTION_REQUEST_REASON, 0);
+        if(reasonId != 0) {
+        }
+        String sum = intent.getStringExtra(ReportActivity.ACTION_REQUEST_SUM);
+        if(sum != null) {
+            sum_edit.setText(sum);
+        }
         getReasonsFromDb();
         getPopularFromDb();
 
@@ -134,15 +150,14 @@ public class AddExpense extends Fragment {
 
             @Override
             protected Object doInBackground(Object[] params) {
-                HttpClient client = new DefaultHttpClient();
-
+                DefaultHttpClient client = new DefaultHttpClient();
+                client.setCookieStore(CookieUtils.getInstance().getCookieStore());
 
                 try {
-
-                    StringBuilder url = new StringBuilder("http://money.discode.ru/phone/set.php?action=expense&sum="+sum+"&reason="+String.valueOf(reason)+"&caption="+ URLEncoder.encode(captionText, "UTF-8")+credit_part);
-
+                    StringBuilder url = new StringBuilder("http://m.discode.ru/api/bill?type=expense&sum="+sum+"&reason_id="+String.valueOf(reason)+"&description="+ URLEncoder.encode(captionText, "UTF-8")+credit_part);
                     HttpGet get = new HttpGet(url.toString());
                     HttpResponse r = client.execute(get);
+                    CookieUtils.getInstance().saveCookie(client);
                     HttpEntity e = r.getEntity();
 
                     String data = EntityUtils.toString(e);
@@ -199,6 +214,20 @@ public class AddExpense extends Fragment {
                     Log.d("MONEYLOG", "Reasonsize: "+((List) o).size());
                     adapter = new ReasonAdapter(getActivity(), (List) o);
                     reason_spinner.setAdapter(adapter);
+
+                    //Проверим, можен уже есть причина затрат
+                    Intent intent = ctx.getIntent();
+                    Integer reasonId = intent.getIntExtra(ReportActivity.ACTION_REQUEST_REASON, 0);
+                    if(reasonId != 0) {
+                        ReasonItem reasonItem = new ReasonItem();
+                        reasonItem.setId(reasonId);
+                        int pos = adapter.getPosition(reasonItem);
+                        if(pos != 0) {
+                            reason_spinner.setSelection(pos);
+                        }
+
+                    }
+
                 } else if(o instanceof Exception) {
                     Toast.makeText(getActivity(),  ((Exception) o).getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -230,6 +259,9 @@ public class AddExpense extends Fragment {
                     Log.d("MONEYLOG", "Popularsize: "+((List) o).size());
                     popularAdapter = new PopularAdapter(getActivity(), (List) o);
                     popularGridView.setAdapter(popularAdapter);
+
+
+
                 } else if(o instanceof Exception) {
                     Toast.makeText(getActivity(),  ((Exception) o).getMessage(), Toast.LENGTH_LONG).show();
                 }

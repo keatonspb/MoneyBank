@@ -1,49 +1,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="keaton.moneybank.ListActivity">
+
     <ViewFlipper
         android:id="@+id/flipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ProgressBar
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <keaton.moneybank.widget.CustomSwipeToRefresh
-            android:id="@+id/swipe_container"
-            android:layout_width="match_parent"
-            android:splitMotionEvents="true"
-            android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
+
+            <keaton.moneybank.widget.CustomSwipeToRefresh
+                android:id="@+id/swipe_container"
                 android:layout_width="match_parent"
-                android:splitMotionEvents="true"
-                android:overScrollMode="never"
-                android:clipToPadding="false"
-                android:id="@+id/content_list"
-                android:layout_height="wrap_content" />
-        </keaton.moneybank.widget.CustomSwipeToRefresh>
-    <ImageButton
-        android:id="@+id/add_button"
-        android:layout_width="57dp"
-        android:layout_height="57dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:tint="@android:color/white"
-        android:elevation="@dimen/elevation_high"
-        android:background="@drawable/oval"
-        android:layout_marginBottom="@dimen/add_button_margin"
-        android:layout_marginRight="@dimen/add_button_margin"
-        android:src="@android:drawable/ic_input_add"/>
+                android:layout_height="match_parent"
+                android:splitMotionEvents="true">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/content_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:splitMotionEvents="true" />
+            </keaton.moneybank.widget.CustomSwipeToRefresh>
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/voice_button"
+                    android:layout_width="57dp"
+                    android:layout_height="57dp"
+                    android:layout_marginBottom="@dimen/add_button_margin"
+                    android:layout_marginRight="@dimen/add_button_margin"
+                    android:background="@drawable/oval"
+                    android:elevation="@dimen/elevation_high"
+                    android:src="@android:drawable/ic_btn_speak_now"
+                    android:tint="@android:color/white" />
+                <ImageButton
+                    android:id="@+id/add_button"
+                    android:layout_width="57dp"
+                    android:layout_height="57dp"
+                    android:layout_marginBottom="@dimen/add_button_margin"
+                    android:layout_marginRight="@dimen/add_button_margin"
+                    android:background="@drawable/oval"
+                    android:elevation="@dimen/elevation_high"
+                    android:src="@android:drawable/ic_input_add"
+                    android:tint="@android:color/white" />
+            </LinearLayout>
+
         </RelativeLayout>
+
         <TextView
-            android:layout_gravity="center"
-            android:text="@string/error_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/error_message" />
     </ViewFlipper>
 
 </LinearLayout>

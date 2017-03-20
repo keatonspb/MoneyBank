@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class DataItem implements Serializable {
     public static int TYPE_EXPENSE = 0;
     public static int TYPE_INCOME = 1;
-    public String sum;
+    public Long sum;
     public int id;
     public int type;
     public String reason;
