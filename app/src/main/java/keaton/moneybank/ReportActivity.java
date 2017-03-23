@@ -1,7 +1,12 @@
 package keaton.moneybank;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.table.TableUtils;
@@ -35,7 +43,8 @@ import keaton.moneybank.entity.ReasonItem;
 import keaton.moneybank.utils.CookieUtils;
 
 
-public class ReportActivity extends ActionBarActivity {
+public class ReportActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    public static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 0x1;
     public static String ACTION_SHOW_INCOME = "ShowIncome";
     public static String ACTION_REQUEST_SUM = "ActionRequestSum";
     public static String ACTION_REQUEST_REASON = "ActionRequestReason";
@@ -43,6 +52,9 @@ public class ReportActivity extends ActionBarActivity {
     private static int SHOW_FORM = 1;
     private ViewPager viewPager;
     private ViewFlipper flipper;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +68,6 @@ public class ReportActivity extends ActionBarActivity {
         flipper = (ViewFlipper) findViewById(R.id.flipper);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new AddAdapter(getSupportFragmentManager()));
-
 
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -81,22 +92,30 @@ public class ReportActivity extends ActionBarActivity {
             }
         });
 
-        if(intent.getAction() == ACTION_SHOW_INCOME) {
+        if (intent.getAction() == ACTION_SHOW_INCOME) {
             viewPager.setCurrentItem(1);
         }
 
 
-
-
         updateReasons();
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
+
+
+
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
-
 
 
     public void updateReasons() {
@@ -119,21 +138,22 @@ public class ReportActivity extends ActionBarActivity {
                     object = object.getJSONObject("data");
                     Log.d("MONEYLOG", data);
                     JSONArray rows = object.getJSONArray("list");
-                    if(rows == null) {
+                    if (rows == null) {
                         throw new Exception("Нет данных");
                     }
                     ArrayList<ReasonItem> result = new ArrayList<>();
                     DatabaseHelper helper = OpenHelperManager.getHelper(ReportActivity.this, DatabaseHelper.class);
                     ReasonDao reasonDao = helper.getReasonDao();
                     TableUtils.clearTable(helper.getConnectionSource(), ReasonItem.class);
-                    for(int i = 0; i < rows.length(); i++) {
+                    for (int i = 0; i < rows.length(); i++) {
                         JSONObject json = rows.optJSONObject(i);
                         ReasonItem reason = new ReasonItem();
                         reason.setId(json.getInt("id"));
                         reason.setName(json.getString("name"));
                         reason.setType(json.getString("type"));
+
                         reason.setRating(json.optInt("rating"));
-                        Log.d("MONEYLOG", "Add reason "+reason.getName()+", "+reason.getType());
+                        Log.d("MONEYLOG", "Add reason " + reason.getName() + ", " + reason.getType());
                         reasonDao.createOrUpdate(reason);
                     }
 
@@ -141,8 +161,8 @@ public class ReportActivity extends ActionBarActivity {
                     JSONArray expenses = object.getJSONArray("popular_expenses");
                     PopularItemDao popularItemDao = helper.getPopularItemDao();
                     TableUtils.clearTable(helper.getConnectionSource(), PopularItem.class);
-                    if(expenses != null) {
-                        for(int i = 0; i < expenses.length(); i++) {
+                    if (expenses != null) {
+                        for (int i = 0; i < expenses.length(); i++) {
                             JSONObject json = expenses.optJSONObject(i);
                             PopularItem popularItem = new PopularItem();
                             popularItem.setIdReason(json.getInt("reason_id"));
@@ -158,11 +178,16 @@ public class ReportActivity extends ActionBarActivity {
                     return e;
                 }
             }
+
             @Override
             protected void onPostExecute(Object o) {
                 flipper.setDisplayedChild(SHOW_FORM);
             }
         }.execute();
+    }
+
+    public Location getLocation() {
+        return mLastLocation;
     }
 
 
@@ -179,7 +204,7 @@ public class ReportActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             finish();//finish your activity
         }
         //noinspection SimplifiableIfStatement
@@ -188,5 +213,36 @@ public class ReportActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

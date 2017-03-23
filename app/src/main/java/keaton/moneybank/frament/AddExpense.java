@@ -2,6 +2,7 @@ package keaton.moneybank.frament;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,7 +25,6 @@ import com.j256.ormlite.stmt.QueryBuilder;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -82,7 +82,6 @@ public class AddExpense extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ctx = getActivity();
-
 
 
         sum_edit = (EditText) ctx.findViewById(R.id.add_summ);
@@ -146,6 +145,7 @@ public class AddExpense extends Fragment {
 
         Log.d("MONEYLOG", "Sum: " + sum + " reasonId: " + reason + " caption: " + captionText);
         final String credit_part = credit.isChecked() ? "&credit=1" : "";
+        final Location location = ((ReportActivity)getActivity()).getLocation();
         new AsyncTask() {
 
             @Override
@@ -154,7 +154,12 @@ public class AddExpense extends Fragment {
                 client.setCookieStore(CookieUtils.getInstance().getCookieStore());
 
                 try {
-                    StringBuilder url = new StringBuilder("http://m.discode.ru/api/bill?type=expense&sum="+sum+"&reason_id="+String.valueOf(reason)+"&description="+ URLEncoder.encode(captionText, "UTF-8")+credit_part);
+                    String location_param = "";
+                    if(location != null) {
+                        location_param = "&lat="+String.valueOf(location.getLatitude())+"&lng="+location.getLongitude();
+                    }
+                    StringBuilder url = new StringBuilder("http://m.discode.ru/api/bill?type=expense&sum="+sum+"&reason_id="+String.valueOf(reason)+"&description="+ URLEncoder.encode(captionText, "UTF-8")+credit_part+location_param);
+                    Log.d("URL", url.toString());
                     HttpGet get = new HttpGet(url.toString());
                     HttpResponse r = client.execute(get);
                     CookieUtils.getInstance().saveCookie(client);

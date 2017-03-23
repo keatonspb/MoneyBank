@@ -27,12 +27,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
@@ -51,6 +46,7 @@ import keaton.moneybank.db.DatabaseHelper;
 import keaton.moneybank.db.dao.ReasonDao;
 import keaton.moneybank.entity.DataItem;
 import keaton.moneybank.entity.ReasonItem;
+import keaton.moneybank.exceptions.ForbiddenException;
 import keaton.moneybank.utils.CookieUtils;
 import keaton.moneybank.utils.Tools;
 
@@ -89,7 +85,6 @@ public class ListActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         listAdapter = new RowsListAdapterWithSwipe(allPosts, new DeleteCallBack());
         list.setAdapter(listAdapter);
-        list.setHasFixedSize(true);
         list.setItemAnimator(new DefaultItemAnimator());
         mLayoutManager = new LinearLayoutManager(this);
         list.setLayoutManager(mLayoutManager);
@@ -203,6 +198,11 @@ public class ListActivity extends ActionBarActivity implements SwipeRefreshLayou
         getData();
     }
 
+    protected void startLoginActivity() {
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
+    }
+
     private void getData() {
         allPosts.clear();
 
@@ -215,6 +215,9 @@ public class ListActivity extends ActionBarActivity implements SwipeRefreshLayou
                 HttpGet get = new HttpGet(url.toString());
                 try {
                     HttpResponse r = client.execute(get);
+                    if(r.getStatusLine().getStatusCode() == 403) {
+                        throw new ForbiddenException();
+                    }
                     HttpEntity e = r.getEntity();
                     Log.d("MONEYLOG", String.valueOf(r.getStatusLine().getStatusCode()));
 
@@ -253,13 +256,15 @@ public class ListActivity extends ActionBarActivity implements SwipeRefreshLayou
                     return result;
 
                 } catch (Exception e) {
-                    Log.d("MONEYLOG", e.getMessage());
                     return e;
                 }
             }
 
             @Override
             protected void onPostExecute(Object o) {
+                if(o instanceof ForbiddenException) {
+                    startLoginActivity();
+                } else
                 if (o instanceof Exception) {
                     flipper.setDisplayedChild(SHOW_ERROR);
                     Toast.makeText(ListActivity.this, ((Exception) o).getMessage(), Toast.LENGTH_LONG).show();
